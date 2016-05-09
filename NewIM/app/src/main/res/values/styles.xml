@@ -1,0 +1,89 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="style_smile">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="style_text" parent="style_smile">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="style_text_small" parent="style_smile">
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="style_text_middle" parent="style_smile">
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="style_text_large" parent="style_smile">
+        <item name="android:textSize">@dimen/text_size_large</item>
+    </style>
+
+    <style name="style_text_black" parent="style_text">
+        <item name="android:textColor">@color/base_color_text_black</item>
+    </style>
+
+    <style name="style_text_white" parent="style_text">
+        <item name="android:textColor">@color/base_color_text_white</item>
+    </style>
+
+    <style name="style_text_gray_small" parent="style_text_small">
+        <item name="android:textColor">@color/color_99</item>
+    </style>
+
+    <style name="style_text_white_small" parent="style_text_small">
+        <item name="android:textColor">@color/base_color_text_white</item>
+    </style>
+
+    <style name="style_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_title</item>
+    </style>
+
+    <style name="style_button_logout" parent="style_text_white">
+        <item name="android:background">@drawable/btn_logout_selector</item>
+    </style>
+
+    <style name="style_text_1e1e1e" parent="style_text">
+        <item name="android:textColor">@color/color_1e1e1e</item>
+    </style>
+
+    <style name="chat_content_date_style">
+        <item name="android:minHeight">50dp</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">#bfbfbf</item>
+    </style>
+
+    <style name="chat_text_name_style">
+        <item name="android:textColor">#818181</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

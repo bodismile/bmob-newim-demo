@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_message"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="@dimen/height_message">
+
+        <ImageView
+            android:id="@+id/iv_recent_avatar"
+            android:layout_width="@dimen/height_50"
+            android:layout_height="@dimen/height_50"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/margin_12"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:layout_marginLeft="@dimen/margin_16"
+            android:src="@mipmap/head"
+            />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1.0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_recent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="25.0dip"
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_marginLeft="@dimen/margin_18"
+                android:layout_gravity="left|center"
+                style="@style/style_text_black"
+                android:layout_toRightOf="@id/iv_recent_avatar"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_medium"
+                />
+
+            <TextView
+                android:id="@+id/tv_recent_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_gravity="left|center"
+                style="@style/style_text_gray_small"
+                android:layout_below="@id/tv_recent_name"
+                android:layout_toRightOf="@id/iv_recent_avatar"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginLeft="@dimen/margin_18"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/ts_13" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_aggree"
+            android:layout_gravity="center"
+            style="@style/style_text_white"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/agree"
+            android:background="@drawable/btn_login_selector"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_line"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/height_message"
+        android:background="@color/color_line" >
+    </View>
+
+</RelativeLayout>

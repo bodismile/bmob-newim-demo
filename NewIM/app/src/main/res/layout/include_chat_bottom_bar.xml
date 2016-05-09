@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/base_comment_emo_bar">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/margin_5"
+    android:paddingRight="@dimen/margin_5"
+    android:minHeight="50dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/btn_chat_add"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/btn_chat_add_selector"
+        android:gravity="center"
+        android:onClick="toAction" />
+
+    <Button
+        android:id="@+id/btn_chat_emo"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        android:layout_marginLeft="6dp"
+        android:background="@drawable/btn_chat_emo_selector"
+        android:gravity="center"
+        android:onClick="toAction" />
+
+    <EditText
+        android:id="@+id/edit_msg"
+        android:textSize="@dimen/text_size_medium"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/color_1e1e1e"
+        android:hint="请输入新消息"
+        android:textColorHint="@color/color_b4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:gravity="left|center"
+        android:lineSpacingExtra="@dimen/margin_3"
+        android:background="@drawable/drawable_edit_normal"
+        android:imeOptions="flagNoExtractUi"
+        android:minHeight="@dimen/height_40"
+        android:padding="@dimen/margin_5"/>
+
+    <Button
+        android:id="@+id/btn_speak"
+        style="@style/style_text_black"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_weight="1.0"
+        android:background="@drawable/btn_chat_record_selector"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/longclick_speak" >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_chat_voice"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="6dp"
+        android:background="@drawable/btn_chat_voice_selector"
+        android:gravity="center"
+        android:textColor="@color/base_color_text_black" >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_chat_keyboard"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        android:background="@drawable/btn_chat_keyboard_selector"
+        android:gravity="center"
+        android:textColor="@color/base_color_text_black" >
+    </Button>
+
+    <Button
+        android:id="@+id/btn_chat_send"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:background="@drawable/btn_chat_send_selector"
+        android:gravity="center"
+        />
+</LinearLayout>
+
+    <View android:layout_width="fill_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_emote_divder"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:id="@+id/layout_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/layout_emo"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager_emo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/layout_add"
+            android:visibility="gone"
+            layout="@layout/include_chat_add" />
+    </LinearLayout>
+
+</LinearLayout>
