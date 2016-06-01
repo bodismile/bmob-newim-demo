@@ -1,7 +1,6 @@
 package cn.bmob.imdemo.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,10 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import cn.bmob.imdemo.R;
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
+import cn.bmob.imdemo.base.ImageLoaderFactory;
 import cn.bmob.imdemo.bean.User;
 import cn.bmob.imdemo.ui.UserInfoActivity;
-import cn.bmob.imdemo.util.ViewUtil;
 
 public class SearchUserHolder extends BaseViewHolder {
 
@@ -31,7 +31,7 @@ public class SearchUserHolder extends BaseViewHolder {
   @Override
   public void bindData(Object o) {
     final User user =(User)o;
-    ViewUtil.setAvatar(user.getAvatar(), R.mipmap.head, avatar);
+    ImageLoaderFactory.getLoader().loadAvator(avatar,user.getAvatar(), R.mipmap.head);
     name.setText(user.getUsername());
     btn_add.setOnClickListener(new View.OnClickListener() {
         @Override

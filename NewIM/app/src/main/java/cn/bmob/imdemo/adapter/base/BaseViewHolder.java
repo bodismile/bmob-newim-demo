@@ -1,4 +1,4 @@
-package cn.bmob.imdemo.adapter;
+package cn.bmob.imdemo.adapter.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,12 +11,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import cn.bmob.imdemo.adapter.OnRecyclerViewListener;
 import cn.bmob.imdemo.base.BaseActivity;
 
-
+/**
+ * 建议使用BaseRecyclerAdapter
+ * @param <T>
+ */
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
-  OnRecyclerViewListener onRecyclerViewListener;
+  public OnRecyclerViewListener onRecyclerViewListener;
   protected Context context;
 
   public BaseViewHolder(Context context, ViewGroup root, int layoutRes,OnRecyclerViewListener listener) {

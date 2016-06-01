@@ -8,8 +8,6 @@ import org.json.JSONObject;
 
 import cn.bmob.newim.bean.BmobIMExtraMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMMessageType;
-import cn.bmob.newim.util.IMLogger;
 
 /**同意添加好友请求-仅仅只用于发送同意添加好友的消息
  * @author smile

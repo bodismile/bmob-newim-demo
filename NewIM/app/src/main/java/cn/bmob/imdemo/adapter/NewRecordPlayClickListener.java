@@ -21,7 +21,7 @@ public class NewRecordPlayClickListener implements View.OnClickListener {
 	BmobIMAudioMessage message;
 	ImageView iv_voice;
 	private AnimationDrawable anim = null;
-	Context context;
+	Context mContext;
 	String currentObjectId = "";
 	MediaPlayer mediaPlayer = null;
 	public static boolean isPlaying = false;
@@ -31,11 +31,11 @@ public class NewRecordPlayClickListener implements View.OnClickListener {
 	public NewRecordPlayClickListener(Context context, BmobIMAudioMessage msg,ImageView voice) {
 		this.iv_voice = voice;
 		this.message = msg;
-		this.context = context;
+		this.mContext = context.getApplicationContext();
 		currentMsg = msg;
 		currentPlayListener = this;
 		try {
-			currentObjectId = BmobUser.getCurrentUser(context).getObjectId();
+			currentObjectId = BmobUser.getCurrentUser(mContext).getObjectId();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,7 +46,7 @@ public class NewRecordPlayClickListener implements View.OnClickListener {
 		if (!(new File(filePath).exists())) {
 			return;
 		}
-		AudioManager audioManager = (AudioManager) context
+		AudioManager audioManager = (AudioManager) mContext
 				.getSystemService(Context.AUDIO_SERVICE);
 		mediaPlayer = new MediaPlayer();
 		if (isUseSpeaker) {

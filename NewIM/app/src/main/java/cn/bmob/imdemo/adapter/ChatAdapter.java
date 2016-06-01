@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
@@ -72,14 +73,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public int findPosition(long id) {
         int index = this.getCount();
         int position = -1;
-
         while(index-- > 0) {
             if(this.getItemId(index) == id) {
                 position = index;
                 break;
             }
         }
-
         return position;
     }
 

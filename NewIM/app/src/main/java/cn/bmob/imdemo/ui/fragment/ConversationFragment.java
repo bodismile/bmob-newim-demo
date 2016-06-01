@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,24 @@ import android.view.ViewTreeObserver;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.bmob.imdemo.R;
 import cn.bmob.imdemo.adapter.ConversationAdapter;
 import cn.bmob.imdemo.adapter.OnRecyclerViewListener;
+import cn.bmob.imdemo.adapter.base.IMutlipleItem;
 import cn.bmob.imdemo.base.ParentWithNaviActivity;
 import cn.bmob.imdemo.base.ParentWithNaviFragment;
-import cn.bmob.imdemo.ui.ChatActivity;
+import cn.bmob.imdemo.bean.Conversation;
+import cn.bmob.imdemo.bean.NewFriendConversation;
+import cn.bmob.imdemo.bean.PrivateConversation;
+import cn.bmob.imdemo.db.NewFriend;
+import cn.bmob.imdemo.db.NewFriendManager;
+import cn.bmob.imdemo.event.RefreshEvent;
 import cn.bmob.imdemo.ui.SearchUserActivity;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
@@ -71,7 +80,25 @@ public class ConversationFragment extends ParentWithNaviFragment {
         rootView =inflater.inflate(R.layout.fragment_conversation, container, false);
         initNaviView();
         ButterKnife.bind(this, rootView);
-        adapter = new ConversationAdapter();
+        //单一布局
+        IMutlipleItem<Conversation> mutlipleItem = new IMutlipleItem<Conversation>() {
+
+            @Override
+            public int getItemViewType(int postion, Conversation c) {
+                return 0;
+            }
+
+            @Override
+            public int getItemLayoutId(int viewtype) {
+                return R.layout.item_conversation;
+            }
+
+            @Override
+            public int getItemCount(List<Conversation> list) {
+                return list.size();
+            }
+        };
+        adapter = new ConversationAdapter(getActivity(),mutlipleItem,null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         rc_view.setLayoutManager(layoutManager);
@@ -98,17 +125,12 @@ public class ConversationFragment extends ParentWithNaviFragment {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                Bundle bundle = new Bundle();
-                BmobIMConversation c = adapter.getItem(position);
-                bundle.putSerializable("c", c);
-                startActivity(ChatActivity.class, bundle);
+                adapter.getItem(position).onClick(getActivity());
             }
 
             @Override
             public boolean onItemLongClick(int position) {
-                //以下两种方式均可以删除会话
-//                BmobIM.getInstance().deleteConversation(adapter.getItem(position).getConversationId());
-                BmobIM.getInstance().deleteConversation(adapter.getItem(position));
+                adapter.getItem(position).onLongClick(getActivity());
                 adapter.remove(position);
                 return true;
             }
@@ -143,9 +165,51 @@ public class ConversationFragment extends ParentWithNaviFragment {
       查询本地会话
      */
     public void query(){
-        adapter.bindDatas(BmobIM.getInstance().loadAllConversation());
+//        adapter.bindDatas(BmobIM.getInstance().loadAllConversation());
+        adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
         sw_refresh.setRefreshing(false);
+    }
+
+    /**
+     * 获取会话列表的数据：增加新朋友会话
+     * @return
+     */
+    private List<Conversation> getConversations(){
+        //添加会话
+        List<Conversation> conversationList = new ArrayList<>();
+        conversationList.clear();
+        List<BmobIMConversation> list =BmobIM.getInstance().loadAllConversation();
+        if(list!=null && list.size()>0){
+            for (BmobIMConversation item:list){
+                switch (item.getConversationType()){
+                    case 1://私聊
+                        conversationList.add(new PrivateConversation(item));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        //添加新朋友会话-获取好友请求表中最新一条记录
+        List<NewFriend> friends = NewFriendManager.getInstance(getActivity()).getAllNewFriend();
+        if(friends!=null && friends.size()>0){
+            conversationList.add(new NewFriendConversation(friends.get(0)));
+        }
+        //重新排序
+        Collections.sort(conversationList);
+        return conversationList;
+    }
+
+    /**注册自定义消息接收事件
+     * @param event
+     */
+    @Subscribe
+    public void onEventMainThread(RefreshEvent event){
+        log("---会话页接收到自定义消息---");
+        //因为新增`新朋友`这种会话类型
+        adapter.bindDatas(getConversations());
+        adapter.notifyDataSetChanged();
     }
 
     /**注册离线消息接收事件
@@ -154,7 +218,7 @@ public class ConversationFragment extends ParentWithNaviFragment {
     @Subscribe
     public void onEventMainThread(OfflineMessageEvent event){
         //重新刷新列表
-        adapter.bindDatas(BmobIM.getInstance().loadAllConversation());
+        adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
     }
 
@@ -166,7 +230,7 @@ public class ConversationFragment extends ParentWithNaviFragment {
     @Subscribe
     public void onEventMainThread(MessageEvent event){
         //重新获取本地消息并刷新列表
-        adapter.bindDatas(BmobIM.getInstance().loadAllConversation());
+        adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
     }
 }

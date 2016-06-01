@@ -1,31 +1,23 @@
 package cn.bmob.imdemo.ui;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
-import com.orhanobut.logger.Logger;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import cn.bmob.imdemo.R;
 import cn.bmob.imdemo.adapter.ConversationAdapter;
 import cn.bmob.imdemo.adapter.NewFriendAdapter;
 import cn.bmob.imdemo.adapter.OnRecyclerViewListener;
+import cn.bmob.imdemo.adapter.base.IMutlipleItem;
 import cn.bmob.imdemo.base.ParentWithNaviActivity;
+import cn.bmob.imdemo.bean.Conversation;
+import cn.bmob.imdemo.db.NewFriend;
 import cn.bmob.imdemo.db.NewFriendManager;
 
 /**新朋友
@@ -74,7 +66,25 @@ public class NewFriendActivity extends ParentWithNaviActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_conversation);
         initNaviView();
-        adapter = new NewFriendAdapter();
+        //单一布局
+        IMutlipleItem<NewFriend> mutlipleItem = new IMutlipleItem<NewFriend>() {
+
+            @Override
+            public int getItemViewType(int postion, NewFriend c) {
+                return 0;
+            }
+
+            @Override
+            public int getItemLayoutId(int viewtype) {
+                return R.layout.item_new_friend;
+            }
+
+            @Override
+            public int getItemCount(List<NewFriend> list) {
+                return list.size();
+            }
+        };
+        adapter = new NewFriendAdapter(this,mutlipleItem,null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);

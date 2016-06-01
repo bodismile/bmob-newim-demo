@@ -53,6 +53,12 @@ public class BaseActivity extends FragmentActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
     @Subscribe
     public void onEvent(Boolean empty){
 

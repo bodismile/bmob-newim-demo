@@ -3,21 +3,14 @@ package cn.bmob.imdemo.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import cn.bmob.imdemo.R;
-import cn.bmob.imdemo.util.ViewUtil;
-import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMSendStatus;
-import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.listener.MessageSendListener;
-import cn.bmob.v3.exception.BmobException;
 
 /**
  * 同意添加好友的agree类型

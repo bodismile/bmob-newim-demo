@@ -2,6 +2,7 @@ package cn.bmob.imdemo.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -73,4 +74,5 @@ public class TimeUtil {
         SimpleDateFormat format = new SimpleDateFormat(FORMAT_TIME);
         return format.format(new Date(time));
     }
+
 }

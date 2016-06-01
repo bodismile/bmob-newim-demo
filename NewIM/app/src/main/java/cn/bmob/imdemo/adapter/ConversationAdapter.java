@@ -1,75 +1,54 @@
 package cn.bmob.imdemo.adapter;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+import android.content.Context;
+import android.view.View;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import cn.bmob.imdemo.R;
+import cn.bmob.imdemo.adapter.base.BaseRecyclerAdapter;
+import cn.bmob.imdemo.adapter.base.BaseRecyclerHolder;
+import cn.bmob.imdemo.adapter.base.IMutlipleItem;
+import cn.bmob.imdemo.bean.Conversation;
+import cn.bmob.imdemo.util.TimeUtil;
+import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMMessage;
+import cn.bmob.newim.bean.BmobIMMessageType;
 
 /**
- * @author :smile
- * @project:ConversationAdapter
- * @date :2016-01-22-14:18
+ * 使用进一步封装的Conversation,教大家怎么自定义会话列表
+ * @author smile
  */
-public class ConversationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
 
-    private List<BmobIMConversation> conversations = new ArrayList<>();
+    public ConversationAdapter(Context context, IMutlipleItem<Conversation> items, Collection<Conversation> datas) {
+        super(context,items,datas);
+    }
 
-    public ConversationAdapter() {}
-
-    /**
-     * @param list
-     */
-    public void bindDatas(List<BmobIMConversation> list) {
-        conversations.clear();
-        if (null != list) {
-            conversations.addAll(list);
+    @Override
+    public void bindView(BaseRecyclerHolder holder, Conversation conversation, int position) {
+        holder.setText(R.id.tv_recent_msg,conversation.getLastMessageContent());
+        holder.setText(R.id.tv_recent_time,TimeUtil.getChatTime(false,conversation.getLastMessageTime()));
+        //会话图标
+        Object obj = conversation.getAvatar();
+        if(obj instanceof String){
+            String avatar=(String)obj;
+            holder.setImageView(avatar, R.mipmap.head, R.id.iv_recent_avatar);
+        }else{
+            int defaultRes = (int)obj;
+            holder.setImageView(null, defaultRes, R.id.iv_recent_avatar);
+        }
+        //会话标题
+        holder.setText(R.id.tv_recent_name, conversation.getcName());
+        //查询指定未读消息数
+        long unread = conversation.getUnReadCount();
+        if(unread>0){
+            holder.setVisible(R.id.tv_recent_unread, View.VISIBLE);
+            holder.setText(R.id.tv_recent_unread, String.valueOf(unread));
+        }else{
+            holder.setVisible(R.id.tv_recent_unread, View.GONE);
         }
     }
-
-    /**移除会话
-     * @param position
-     */
-    public void remove(int position){
-        conversations.remove(position);
-        notifyDataSetChanged();
-    }
-
-    /**获取会话
-     * @param position
-     * @return
-     */
-    public BmobIMConversation getItem(int position){
-        return conversations.get(position);
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ConversationHolder(parent.getContext(), parent,onRecyclerViewListener);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((BaseViewHolder)holder).bindData(conversations.get(position));
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return 1;
-    }
-
-    @Override
-    public int getItemCount() {
-        return conversations.size();
-    }
-
-
-    private OnRecyclerViewListener onRecyclerViewListener;
-
-    public void setOnRecyclerViewListener(OnRecyclerViewListener onRecyclerViewListener) {
-        this.onRecyclerViewListener = onRecyclerViewListener;
-    }
-
 }

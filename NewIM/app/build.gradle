@@ -4,6 +4,9 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
     defaultConfig {
         applicationId "cn.bmob.imdemo"
         minSdkVersion 14
@@ -49,13 +52,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.orhanobut:logger:1.4'
     compile 'org.greenrobot:eventbus:3.0.0'
-    //bmob-im所需的依赖包
-    compile 'cn.bmob.android:androidasync:2.1.6'
-    //bmob-sdk:3.4.6需要依赖okhttp（2.4.0）、okio（2.4.0）,而support-v4（23.2.1）和org.apache.http.legacy包是为了兼容Android6.0系统所需
-    compile 'cn.bmob.android:bmob-sdk:3.4.6'
-    compile('com.android.support:support-v4:23.2.1') {
-        exclude module: 'support-annotations'
-    }
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okio:okio:1.4.0'
+    //bmob-im:自2.0.5开始提供aar格式：包含BmobNewIM_xxxx.jar、androidasync_2.1.6.jar、bmob_im_notification_strings.xml
+    compile 'cn.bmob.android:bmob-im:2.0.5@aar'
+    //bmob-sdk:3.4.7
+    compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
 }

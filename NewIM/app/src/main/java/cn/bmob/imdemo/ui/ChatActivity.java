@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,8 +28,6 @@ import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +38,6 @@ import cn.bmob.imdemo.R;
 import cn.bmob.imdemo.adapter.ChatAdapter;
 import cn.bmob.imdemo.adapter.OnRecyclerViewListener;
 import cn.bmob.imdemo.base.ParentWithNaviActivity;
-import cn.bmob.imdemo.bean.AddFriendMessage;
 import cn.bmob.imdemo.util.Util;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
@@ -54,14 +50,12 @@ import cn.bmob.newim.bean.BmobIMVideoMessage;
 import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.core.BmobRecordManager;
 import cn.bmob.newim.event.MessageEvent;
-import cn.bmob.newim.event.OfflineMessageEvent;
 import cn.bmob.newim.listener.MessageListHandler;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.listener.MessagesQueryListener;
 import cn.bmob.newim.listener.ObseverListener;
 import cn.bmob.newim.listener.OnRecordChangeListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
-import cn.bmob.newim.util.IMLogger;
 import cn.bmob.v3.exception.BmobException;
 
 /**聊天界面
@@ -538,7 +532,6 @@ public class ChatActivity extends ParentWithNaviActivity implements ObseverListe
         c.sendMessage(location, listener);
     }
 
-
     /**
      * 消息发送监听器
      */
@@ -663,8 +656,6 @@ public class ChatActivity extends ParentWithNaviActivity implements ObseverListe
         addUnReadMessage();
         //添加页面消息监听器
         BmobIM.getInstance().addMessageListHandler(this);
-        //添加通知监听
-        BmobNotificationManager.getInstance(this).addObserver(this);
         // 有可能锁屏期间，在聊天界面出现通知栏，这时候需要清除通知
         BmobNotificationManager.getInstance(this).cancelNotification();
         super.onResume();
@@ -687,8 +678,6 @@ public class ChatActivity extends ParentWithNaviActivity implements ObseverListe
 
     @Override
     protected void onPause() {
-        //取消通知栏监听
-        BmobNotificationManager.getInstance(this).removeObserver(this);
         //移除页面消息监听器
         BmobIM.getInstance().removeMessageListHandler(this);
         super.onPause();
@@ -697,10 +686,14 @@ public class ChatActivity extends ParentWithNaviActivity implements ObseverListe
     @Override
     protected void onDestroy() {
         //清理资源
-        recordManager.clear();
+        if(recordManager!=null){
+            recordManager.clear();
+        }
         //更新此会话的所有消息为已读状态
+        if(c!=null){
+            c.updateLocalCache();
+        }
         hideSoftInputView();
-        c.updateLocalCache();
         super.onDestroy();
     }
 

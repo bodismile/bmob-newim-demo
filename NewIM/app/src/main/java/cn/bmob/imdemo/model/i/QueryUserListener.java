@@ -10,6 +10,7 @@ import cn.bmob.v3.listener.BmobListener;
  * @date :2016-02-01-16:23
  */
 public abstract class QueryUserListener extends BmobListener<User> {
+
     public abstract void done(User s, BmobException e);
 
     @Override

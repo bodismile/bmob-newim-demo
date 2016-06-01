@@ -63,7 +63,7 @@
         </receiver>
 
         <service
-            android:name="cn.bmob.newim.core.service.BmobImService"
+            android:name="cn.bmob.newim.core.service.BmobIMService"
             android:process=":bmobcore" />
         <service
             android:name="cn.bmob.newim.core.service.NotifyService"

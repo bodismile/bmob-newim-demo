@@ -23,7 +23,6 @@ import cn.bmob.imdemo.event.RefreshEvent;
 import cn.bmob.imdemo.model.UserModel;
 import cn.bmob.imdemo.model.i.UpdateCacheListener;
 import cn.bmob.imdemo.ui.MainActivity;
-import cn.bmob.imdemo.util.Util;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -151,9 +150,8 @@ public class DemoMessageHandler extends BmobIMMessageHandler{
     private void showAgreeNotify(BmobIMUserInfo info,AgreeAddFriendMessage agree){
         Intent pendingIntent = new Intent(context, MainActivity.class);
         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        Bitmap largetIcon = Util.getBitmapFromUrl(info.getAvatar());
-        BmobNotificationManager.getInstance(context).showNotification(largetIcon,
-                info.getName(),agree.getMsg(),agree.getMsg(),pendingIntent);
+        Bitmap largetIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+        BmobNotificationManager.getInstance(context).showNotification(largetIcon,info.getName(),agree.getMsg(),agree.getMsg(),pendingIntent);
     }
 
     /**

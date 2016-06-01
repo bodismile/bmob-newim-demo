@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import cn.bmob.imdemo.R;
-import cn.bmob.imdemo.util.ViewUtil;
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
+import cn.bmob.imdemo.base.ImageLoaderFactory;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -55,7 +56,7 @@ public class SendImageHolder extends BaseViewHolder {
     BmobIMMessage msg = (BmobIMMessage)o;
     //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
     final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-    ViewUtil.setAvatar(info != null ? info.getAvatar() : null, R.mipmap.head, iv_avatar);
+    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null,R.mipmap.head);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     String time = dateFormat.format(msg.getCreateTime());
     tv_time.setText(time);
@@ -78,7 +79,8 @@ public class SendImageHolder extends BaseViewHolder {
     }
 
     //发送的不是远程图片地址，则取本地地址
-    ViewUtil.setPicture(TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl(), R.mipmap.ic_launcher, iv_picture,null);
+    ImageLoaderFactory.getLoader().load(iv_picture,TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl(),R.mipmap.ic_launcher,null);
+//    ViewUtil.setPicture(TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl(), R.mipmap.ic_launcher, iv_picture,null);
 
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.bmob.imdemo.R;
 import cn.bmob.imdemo.adapter.ContactAdapter;
-import cn.bmob.imdemo.adapter.ConversationAdapter;
 import cn.bmob.imdemo.adapter.OnRecyclerViewListener;
+import cn.bmob.imdemo.adapter.base.IMutlipleItem;
 import cn.bmob.imdemo.base.ParentWithNaviActivity;
 import cn.bmob.imdemo.base.ParentWithNaviFragment;
 import cn.bmob.imdemo.bean.Friend;
@@ -34,8 +32,6 @@ import cn.bmob.imdemo.ui.SearchUserActivity;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.event.MessageEvent;
-import cn.bmob.newim.event.OfflineMessageEvent;
 import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 
@@ -83,7 +79,32 @@ public class ContactFragment extends ParentWithNaviFragment {
         rootView =inflater.inflate(R.layout.fragment_conversation, container, false);
         initNaviView();
         ButterKnife.bind(this, rootView);
-        adapter = new ContactAdapter();
+        IMutlipleItem<Friend> mutlipleItem = new IMutlipleItem<Friend>() {
+
+            @Override
+            public int getItemViewType(int postion, Friend friend) {
+                if(postion==0){
+                    return ContactAdapter.TYPE_NEW_FRIEND;
+                }else{
+                    return ContactAdapter.TYPE_ITEM;
+                }
+            }
+
+            @Override
+            public int getItemLayoutId(int viewtype) {
+                if(viewtype== ContactAdapter.TYPE_NEW_FRIEND){
+                    return R.layout.header_new_friend;
+                }else{
+                    return R.layout.item_contact;
+                }
+            }
+
+            @Override
+            public int getItemCount(List<Friend> list) {
+                return list.size()+1;
+            }
+        };
+        adapter = new ContactAdapter(getActivity(),mutlipleItem,null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(getActivity());
         rc_view.setLayoutManager(layoutManager);
@@ -127,6 +148,9 @@ public class ContactFragment extends ParentWithNaviFragment {
             @Override
             public boolean onItemLongClick(final int position) {
                 log("长按" + position);
+                if(position==0){
+                    return true;
+                }
                 UserModel.getInstance().deleteFriend(adapter.getItem(position), new DeleteListener() {
                     @Override
                     public void onSuccess() {
@@ -142,7 +166,7 @@ public class ContactFragment extends ParentWithNaviFragment {
                 return true;
             }
         });
-}
+    }
 
     @Override
     public void onResume() {
@@ -169,7 +193,7 @@ public class ContactFragment extends ParentWithNaviFragment {
     @Subscribe
     public void onEventMainThread(RefreshEvent event){
         //重新刷新列表
-        log("---接收到自定义消息---");
+        log("---联系人界面接收到自定义消息---");
         adapter.notifyDataSetChanged();
     }
 

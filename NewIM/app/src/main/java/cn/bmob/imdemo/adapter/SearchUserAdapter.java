@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
 import cn.bmob.imdemo.bean.User;
-import cn.bmob.newim.bean.BmobIMConversation;
 
 /**
  * @author :smile

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity implements ObseverListener{
             public void done(String uid, BmobException e) {
                 if (e == null) {
                     Logger.i("connect success");
+                    //服务器连接成功就发送一个更新事件，同步更新会话及主页的小红点
+                    EventBus.getDefault().post(new RefreshEvent());
                 } else {
                     Logger.e(e.getErrorCode() + "/" + e.getMessage());
                 }
@@ -147,17 +150,8 @@ public class MainActivity extends BaseActivity implements ObseverListener{
         super.onResume();
         //显示小红点
         checkRedPoint();
-        //添加观察者-用于是否显示通知消息
-        BmobNotificationManager.getInstance(this).addObserver(this);
         //进入应用后，通知栏应取消
         BmobNotificationManager.getInstance(this).cancelNotification();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //移除观察者
-        BmobNotificationManager.getInstance(this).removeObserver(this);
     }
 
     @Override
@@ -165,8 +159,6 @@ public class MainActivity extends BaseActivity implements ObseverListener{
         super.onDestroy();
         //清理导致内存泄露的资源
         BmobIM.getInstance().clear();
-        //完全退出应用时需调用clearObserver来清除观察者
-        BmobNotificationManager.getInstance(this).clearObserver();
     }
 
     /**注册消息接收事件
@@ -195,7 +187,8 @@ public class MainActivity extends BaseActivity implements ObseverListener{
     }
 
     private void checkRedPoint(){
-        if(BmobIM.getInstance().getAllUnReadCount()>0){
+        int count = (int)BmobIM.getInstance().getAllUnReadCount();
+        if(count>0){
             iv_conversation_tips.setVisibility(View.VISIBLE);
         }else{
             iv_conversation_tips.setVisibility(View.GONE);

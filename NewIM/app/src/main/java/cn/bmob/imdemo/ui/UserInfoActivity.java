@@ -12,10 +12,10 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cn.bmob.imdemo.R;
+import cn.bmob.imdemo.base.ImageLoaderFactory;
 import cn.bmob.imdemo.base.ParentWithNaviActivity;
 import cn.bmob.imdemo.bean.AddFriendMessage;
 import cn.bmob.imdemo.bean.User;
-import cn.bmob.imdemo.util.ViewUtil;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -62,7 +62,7 @@ public class UserInfoActivity extends ParentWithNaviActivity {
         }
         //构造聊天方的用户信息:传入用户id、用户名和用户头像三个参数
         info = new BmobIMUserInfo(user.getObjectId(),user.getUsername(),user.getAvatar());
-        ViewUtil.setAvatar(user.getAvatar(), R.mipmap.head, iv_avator);
+        ImageLoaderFactory.getLoader().loadAvator(iv_avator,user.getAvatar(),R.mipmap.head);
         tv_name.setText(user.getUsername());
     }
 

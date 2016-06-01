@@ -1,21 +1,15 @@
 package cn.bmob.imdemo;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.orhanobut.logger.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import cn.bmob.imdemo.base.UniversalImageLoader;
 import cn.bmob.newim.BmobIM;
-import cn.bmob.v3.Bmob;
 
 /**
  * @author :smile
@@ -39,7 +33,6 @@ public class BmobIMApplication extends Application{
     public void onCreate() {
         super.onCreate();
         setInstance(this);
-        Bmob.DEBUG=true;
         //初始化
         Logger.init("smile");
         //只有主进程运行的时候才需要初始化
@@ -50,21 +43,7 @@ public class BmobIMApplication extends Application{
             BmobIM.registerDefaultMessageHandler(new DemoMessageHandler(this));
         }
         //uil初始化
-        initImageLoader(this);
-    }
-
-    public static void initImageLoader(Context context) {
-        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
-        config.threadPoolSize(3);
-        config.memoryCache(new WeakMemoryCache());
-        config.threadPriority(Thread.NORM_PRIORITY - 2);
-        config.denyCacheImageMultipleSizesInMemory();
-        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
-        config.tasksProcessingOrder(QueueProcessingType.LIFO);
-//        config.writeDebugLogs(); // Remove for release app
-        // Initialize ImageLoader with configuration.
-        ImageLoader.getInstance().init(config.build());
+        UniversalImageLoader.initImageLoader(this);
     }
 
     /**

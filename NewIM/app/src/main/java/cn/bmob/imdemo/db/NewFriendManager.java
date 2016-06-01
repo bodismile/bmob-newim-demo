@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,7 +100,7 @@ public class NewFriendManager {
      */
     public List<NewFriend> getAllNewFriend(){
         NewFriendDao dao =openReadableDb().getNewFriendDao();
-        return dao.queryBuilder().orderDesc(NewFriendDao.Properties.Id).list();
+        return dao.queryBuilder().orderDesc(NewFriendDao.Properties.Time).list();
     }
 
     /**创建或更新新朋友信息
@@ -141,6 +143,18 @@ public class NewFriendManager {
     }
 
     /**
+     * 获取未读的好友邀请
+     * @return
+     */
+    public int getNewInvitationCount(){
+        List<NewFriend> infos =getNoVerifyNewFriend();
+        if(infos!=null && infos.size()>0){
+            return infos.size();
+        }else{
+            return 0;
+        }
+    }
+    /**
      * 获取所有未读未验证的好友请求
      * @return
      */
@@ -156,7 +170,6 @@ public class NewFriendManager {
     public void updateBatchStatus(){
         List<NewFriend> infos =getNoVerifyNewFriend();
         if(infos!=null && infos.size()>0){
-            Log.i("bmob", "updateBatchStatus: :"+infos.size());
             int size =infos.size();
             List<NewFriend> all =new ArrayList<>();
             for (int i = 0; i < size; i++) {
@@ -178,15 +191,14 @@ public class NewFriendManager {
 
     /**
      * 修改指定好友请求的状态
-     * @param uid
-     * @param time
+     * @param friend
      * @param status
      * @return
      */
-    public long updateNewFriend(String uid,Long time,Integer status){
-        NewFriend friend =getNewFriend(uid, time);
+    public long updateNewFriend(NewFriend friend,int status){
+        NewFriendDao dao = openWritableDb().getNewFriendDao();
         friend.setStatus(status);
-        return insertOrUpdateNewFriend(friend);
+        return dao.insertOrReplace(friend);
     }
 
     /**

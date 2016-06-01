@@ -136,5 +136,4 @@ public abstract class ParentWithNaviFragment extends BaseFragment {
         return (T) rootView.findViewById(id);
     }
 
-
 }

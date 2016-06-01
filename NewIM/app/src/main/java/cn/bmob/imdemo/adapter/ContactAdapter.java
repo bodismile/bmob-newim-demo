@@ -1,91 +1,48 @@
 package cn.bmob.imdemo.adapter;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+import android.content.Context;
+import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.Collection;
 
+import cn.bmob.imdemo.R;
+import cn.bmob.imdemo.adapter.base.BaseRecyclerAdapter;
+import cn.bmob.imdemo.adapter.base.BaseRecyclerHolder;
+import cn.bmob.imdemo.adapter.base.IMutlipleItem;
 import cn.bmob.imdemo.bean.Friend;
 import cn.bmob.imdemo.bean.User;
-import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.imdemo.db.NewFriendManager;
 
-/**
+/**联系人
+ * 一种简洁的Adapter实现方式，可用于多种Item布局的recycleView实现，不用再写ViewHolder啦
  * @author :smile
- * @project:ContactAdapter
+ * @project:ContactNewAdapter
  * @date :2016-04-27-14:18
  */
-public class ContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ContactAdapter extends BaseRecyclerAdapter<Friend> {
 
-    private final int TYPE_NEW_FRIEND = 0;
-    private final int TYPE_ITEM = 1;
+    public static final int TYPE_NEW_FRIEND = 0;
+    public static final int TYPE_ITEM = 1;
 
-    private List<Friend> friends = new ArrayList<>();
-
-    public ContactAdapter() {}
-
-    /**
-     * @param list
-     */
-    public void bindDatas(List<Friend> list) {
-        friends.clear();
-        if (null != list) {
-            friends.addAll(list);
-        }
-    }
-
-    /**移除会话
-     * @param position
-     */
-    public void remove(int position){
-        friends.remove(position-1);
-        notifyDataSetChanged();
-    }
-
-    /**获取好友
-     * @param position
-     * @return
-     */
-    public Friend getItem(int position){
-        return friends.get(position-1);
+    public ContactAdapter(Context context, IMutlipleItem<Friend> items, Collection<Friend> datas) {
+        super(context,items,datas);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_NEW_FRIEND) {
-            return new ContactNewFriendHolder(parent.getContext(), parent, onRecyclerViewListener);
-        } else {
-            return new ContactHolder(parent.getContext(), parent, onRecyclerViewListener);
+    public void bindView(BaseRecyclerHolder holder, Friend friend, int position) {
+        if(holder.layoutId==R.layout.item_contact){
+            User user =friend.getFriendUser();
+            //好友头像
+            holder.setImageView(user == null ? null : user.getAvatar(), R.mipmap.head, R.id.iv_recent_avatar);
+            //好友名称
+            holder.setText(R.id.tv_recent_name,user==null?"未知":user.getUsername());
+        }else if(holder.layoutId==R.layout.header_new_friend){
+            if(NewFriendManager.getInstance(context).hasNewFriendInvitation()){
+                holder.setVisible(R.id.iv_msg_tips,View.VISIBLE);
+            }else{
+                holder.setVisible(R.id.iv_msg_tips, View.GONE);
+            }
         }
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ContactHolder) {
-            ((BaseViewHolder)holder).bindData(getItem(position));
-        } else if(holder instanceof ContactNewFriendHolder){
-            ((BaseViewHolder)holder).bindData(null);
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if(position==0){
-            return TYPE_NEW_FRIEND;
-        }
-        return TYPE_ITEM;
-    }
-
-    @Override
-    public int getItemCount() {
-        return friends.size()+1;
-    }
-
-    private OnRecyclerViewListener onRecyclerViewListener;
-
-    public void setOnRecyclerViewListener(OnRecyclerViewListener onRecyclerViewListener) {
-        this.onRecyclerViewListener = onRecyclerViewListener;
     }
 
 }

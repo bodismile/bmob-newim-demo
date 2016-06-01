@@ -2,15 +2,13 @@ package cn.bmob.imdemo.bean;
 
 import android.text.TextUtils;
 
-import com.orhanobut.logger.Logger;
-
 import org.json.JSONObject;
 
 import cn.bmob.imdemo.Config;
 import cn.bmob.imdemo.db.NewFriend;
 import cn.bmob.newim.bean.BmobIMExtraMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.util.IMLogger;
+import com.orhanobut.logger.Logger;
 
 /**添加好友请求
  * @author :smile

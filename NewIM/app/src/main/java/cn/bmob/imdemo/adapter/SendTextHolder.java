@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import cn.bmob.imdemo.R;
-import cn.bmob.imdemo.util.ViewUtil;
+import cn.bmob.imdemo.adapter.base.BaseViewHolder;
+import cn.bmob.imdemo.base.ImageLoaderFactory;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMSendStatus;
@@ -53,7 +54,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
     final BmobIMMessage message = (BmobIMMessage)o;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-    ViewUtil.setAvatar(info != null ? info.getAvatar() : null, R.mipmap.head, iv_avatar);
+    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null, R.mipmap.head);
     String time = dateFormat.format(message.getCreateTime());
     String content = message.getContent();
     tv_message.setText(content);
